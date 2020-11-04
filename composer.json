@@ -1,12 +1,12 @@
 {
-    "name": "aogg/think-orm",
+    "name": "aogg/think-orm-extend",
     "description": "ThinkPHP6 extend orm.",
     "keywords": [
         "orm",
         "thinkphp6",
         "thinkphp"
     ],
-    "homepage": "https://github.com/aogg/composer-think-orm/",
+    "homepage": "https://github.com/aogg/composer-think-orm-extend/",
     "license": "Apache-2.0",
     "authors": [
         {

@@ -1,6 +1,6 @@
 <?php
 /**
- * User: aozhuochao
+ * User: aogg
  * Date: 2020/10/22
  */
 
@@ -9,6 +9,7 @@ namespace aogg\think\orm;
 
 class Query extends \think\db\Query
 {
+    protected $cacheLimit = 0;
 
     /**
      * 查询缓存
@@ -24,17 +25,19 @@ class Query extends \think\db\Query
     public function cacheLimit($limit, $key = true, $expire = null, string $tag = null)
     {
         $this->cache($key, $expire, $tag);
-        
-        $mysqlConnection = $this->getConnection();
 
-        if ($mysqlConnection instanceof Mysql) {
-            $mysqlConnection->setCacheLimit($limit);
-        }
-        
+        $this->cacheLimit = $limit;
 
         return $this;
     }
 
+    /**
+     * @return int
+     */
+    public function getCacheLimit()
+    {
+        return $this->cacheLimit;
+    }
 
 
 }

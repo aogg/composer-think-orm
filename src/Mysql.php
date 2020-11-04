@@ -1,6 +1,6 @@
 <?php
 /**
- * User: aozhuochao
+ * User: aogg
  * Date: 2020/10/22
  */
 
@@ -12,7 +12,16 @@ use think\db\BaseQuery;
 
 class Mysql extends \think\db\connector\Mysql
 {
-    protected $cacheLimit = 0;
+
+    public function __construct(array $config = [])
+    {
+        if ($config['type'] === Mysql::class) { // 设置为class，会导致报错
+            $config['type'] = 'mysql';
+        }
+
+        parent::__construct($config);
+    }
+
 
     public function getQueryClass(): string
     {
@@ -23,63 +32,48 @@ class Mysql extends \think\db\connector\Mysql
      * 支持换成分页
      *
      * @param BaseQuery $query
-     * @return array
+     * @return array|Collection
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
      */
     public function select(BaseQuery $query): array
     {
-        $limit = $query->getOptions('limit');
+        /** @var Query $query */
+        if (empty($query->getCacheLimit())) { // 没有设置缓存一切照旧
+            return parent::select($query);
+        }
+
+        list($offset, $length) = $query->getOptions('limit');
         $page = $query->getOptions('page');
 
-        $query->limit($this->cacheLimit);
+        $query = $query->limit($query->getCacheLimit());
         $query->setOption('page', null);
+        if($page){
+            $length = isset($page[1])?$page[1]:0;
+            $offset = (max(isset($page[0])?$page[0]:1, 1) - 1) * $length;
+        }
+        $length = $length >= 0?$length:15;
+        $offset = max($offset, 0);
 
         $list = parent::select($query);
 
-        $limit = explode(',', $limit?:'');
-        $page = explode(',', $page?:'');
-        if ($list instanceof Collection) {
-            if($page){
-                $limit[1] = max(isset($page[1])?$page[1]:0, 0);
-                $limit[0] = (max(isset($page[0])?$page[0]:1, 1) - 1) * $limit[1];
-            }
+//        $page = explode(',', $page?:'');
 
-            if ($limit) {
-                $list = $list->slice(
-                    isset($limit[0])?$limit[0]:0,
-                    isset($limit[1])?$limit[1]:15
-                );
-            }
-        }else if(is_array($list)){
-            if($page){
-                $limit[1] = max(isset($page[1])?$page[1]:0, 0);
-                $limit[0] = (max(isset($page[0])?$page[0]:1, 1) - 1) * $limit[1];
-            }
-
-            if ($limit){
-                $list = array_slice(
-                    $list,
-                    isset($limit[0])?$limit[0]:0,
-                    isset($limit[1])?$limit[1]:15
-                );
-            }
-        }
+        $list = array_slice(
+            $list,
+            $offset,
+            $length
+        );
+//        if ($list instanceof Collection) {
+//            $list = $list->slice(
+//                $offset,
+//                $length
+//            );
+//        }else if(is_array($list)){ // 必定array
+//        }
 
         return $list;
     }
-
-    /**
-     * @param int $cacheLimit
-     * @return $this
-     */
-    public function setCacheLimit(int $cacheLimit)
-    {
-        $this->cacheLimit = $cacheLimit;
-
-        return $this;
-    }
-
 
 
 }

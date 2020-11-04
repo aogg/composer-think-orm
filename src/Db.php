@@ -1,6 +1,6 @@
 <?php
 /**
- * User: aozhuochao
+ * User: aogg
  * Date: 2020/10/22
  */
 
@@ -11,18 +11,14 @@ use think\db\ConnectionInterface;
 
 class Db extends \think\Db
 {
-    protected function createConnection(string $name): ConnectionInterface
+    protected function getConnectionConfig(string $name): array
     {
-
-        $config = $this->getConnectionConfig($name);
-
-        $type = !empty($config['type']) ? $config['type'] : 'mysql';
-
-        if($type === 'mysql') {
-            $name = \aogg\think\orm\Mysql::class;
+        $arr = parent::getConnectionConfig($name);
+        if (strtolower(!empty($arr['type'])?$arr['type']:'') === 'mysql') {
+            $arr['type'] = Mysql::class;
         }
 
-        return parent::createConnection($name);
+        return $arr;
     }
 
 }
