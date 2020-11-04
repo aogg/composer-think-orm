@@ -6,7 +6,7 @@
  * Time: 12:16
  */
 
-namespace app\helpers\traits;
+namespace aogg\think\orm\traits;
 
 /**
  * 更新失败就抛出异常
