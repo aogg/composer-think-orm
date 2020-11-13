@@ -12,6 +12,13 @@ class Query extends \think\db\Query
     protected $cacheLimit = 0;
 
     /**
+     * 是否跳过全局字段
+     *
+     * @var bool
+     */
+    protected $skipGlobalField = false;
+
+    /**
      * 查询缓存
      * 支持分页
      *
@@ -37,6 +44,25 @@ class Query extends \think\db\Query
     public function getCacheLimit()
     {
         return $this->cacheLimit;
+    }
+
+    /**
+     * @param bool $skipGlobalField
+     * @return $this
+     */
+    public function setSkipGlobalField(bool $skipGlobalField = true)
+    {
+        $this->skipGlobalField = $skipGlobalField;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSkipGlobalField(): bool
+    {
+        return $this->skipGlobalField;
     }
 
 

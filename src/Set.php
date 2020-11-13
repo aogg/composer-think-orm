@@ -128,6 +128,8 @@ class Set
     {
         if (empty(static::$globalField)) {
             return;
+        }else if($query->isSkipGlobalField()){ // 当前查询跳过全局字段
+            return;
         }
 
         if ($type === 'where') {
