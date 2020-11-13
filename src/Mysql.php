@@ -12,6 +12,7 @@ use think\db\BaseQuery;
 
 class Mysql extends \think\db\connector\Mysql
 {
+    protected static $eventFinishBool = false;
 
     public function __construct(array $config = [])
     {
@@ -20,6 +21,11 @@ class Mysql extends \think\db\connector\Mysql
         }
 
         parent::__construct($config);
+
+        if (!static::$eventFinishBool){ // 指通知一次
+            static::$eventFinishBool = true;
+            event('ConnectorPdoCreateFirst', [$this]); // pdo连接首次创建通知
+        }
     }
 
     /**
