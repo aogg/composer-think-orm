@@ -22,8 +22,8 @@ class Mysql extends \think\db\connector\Mysql
 
         parent::__construct($config);
 
-        if (!static::$eventFinishBool){ // 指通知一次
-            static::$eventFinishBool = true;
+        if (!self::$eventFinishBool){ // 指通知一次
+            self::$eventFinishBool = true;
             event('ConnectorPdoCreateFirst', [$this]); // pdo连接首次创建通知
         }
     }
