@@ -6,7 +6,9 @@
 
 namespace aogg\think\orm;
 
-
+/**
+ * @method Model getModel()
+ */
 class Query extends \think\db\Query
 {
     protected $cacheLimit = 0;
@@ -62,7 +64,7 @@ class Query extends \think\db\Query
      */
     public function isSkipGlobalField(): bool
     {
-        return $this->skipGlobalField;
+        return $this->skipGlobalField || $this->getModel()->isSkipGlobalField();
     }
 
 

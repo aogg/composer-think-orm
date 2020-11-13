@@ -21,6 +21,13 @@ class Model extends \think\Model
      */
     protected $autoWriteTimestamp;
 
+    /**
+     * 是否跳过全局字段
+     *
+     * @var bool
+     */
+    protected $skipGlobalField = false;
+
     public static function getOriginName()
     {
         return (new static)->getName();
@@ -34,6 +41,14 @@ class Model extends \think\Model
     public static function getPkFieldName()
     {
         return (new static)->getPk();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSkipGlobalField()
+    {
+        return $this->skipGlobalField;
     }
 
 }
