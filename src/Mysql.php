@@ -22,10 +22,26 @@ class Mysql extends \think\db\connector\Mysql
         parent::__construct($config);
     }
 
-
+    /**
+     * 获取当前连接器类对应的Query类
+     *
+     * @access public
+     * @return string
+     */
     public function getQueryClass(): string
     {
         return $this->getConfig('query') ?: Query::class;
+    }
+
+    /**
+     * 获取当前连接器类对应的Builder类
+     *
+     * @access public
+     * @return string
+     */
+    public function getBuilderClass(): string
+    {
+        return $this->getConfig('builder') ?: MysqlBuilder::class;
     }
 
     /**
