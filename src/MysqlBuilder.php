@@ -37,7 +37,7 @@ class MysqlBuilder extends \think\db\builder\Mysql
 
     public function insertAll(Query $query, array $dataSet, bool $replace = false): string
     {
-        \aogg\think\orm\Set::handleGlobalField($this, $query, 'insert');
+        \aogg\think\orm\Set::handleGlobalField($this, $query, 'insertAll', $dataSet);
         return parent::insertAll($query, $dataSet, $replace);
     }
 

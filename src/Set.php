@@ -123,8 +123,9 @@ class Set
      * @param MysqlBuilder $builder
      * @param Query|\think\db\Query $query
      * @param string $type
+     * @param array $insertAllData
      */
-    public static function handleGlobalField($builder, $query, $type)
+    public static function handleGlobalField($builder, $query, $type, &$insertAllData = [])
     {
         if (empty(static::$globalField)) {
             return;
@@ -162,6 +163,14 @@ class Set
             }
 
             $query->setOption('data', $data);
+        }else if($type === 'insertAll'){
+
+            foreach (static::$globalField as $field => $globalFieldValue) {
+                foreach ($insertAllData as &$datum) {
+                    static::handleGlobalFieldDataPro($datum, $field, $globalFieldValue);
+                }
+            }
+
         }
 
     }
