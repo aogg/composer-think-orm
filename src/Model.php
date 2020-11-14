@@ -51,4 +51,15 @@ class Model extends \think\Model
         return $this->skipGlobalField;
     }
 
+    /**
+     * @param bool $skipGlobalField
+     * @return $this
+     */
+    public function setSkipGlobalField(bool $skipGlobalField = true)
+    {
+        $this->skipGlobalField = $skipGlobalField;
+
+        return $this;
+    }
+
 }
