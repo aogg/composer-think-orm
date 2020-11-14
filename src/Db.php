@@ -22,6 +22,16 @@ class Db extends \think\Db
     }
 
     /**
+     * 获取表前缀
+     *
+     * @return mixed
+     */
+    public function getPrefix()
+    {
+        return $this->instance()->getConfig('prefix');
+    }
+
+    /**
      * insert根据select的数据
      *
      * @param string $fullTableName 完整表名
