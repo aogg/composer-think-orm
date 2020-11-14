@@ -51,19 +51,21 @@ class Db extends \think\Db
 
         foreach ($arr as $field) {
             // 去除主键
-            if (is_string($pk) && $pk === $field) {
+            if (isset($fieldsValue[$field])){ // 自定义不跳过
+
+            }else if (is_string($pk) && $pk === $field) {
                 continue;
-            }else if(is_array($pk) && in_array($field, $pk)){
+            }else if(is_array($pk) && in_array($field, $pk) && empty(array_intersect($pk, array_keys($fieldsValue)))){
                 continue;
             }
 
             // 构建
-            $insertField .= $field . ',';
+            $insertField .= "`$field`" . ',';
 
             if (isset($fieldsValue[$field])) {
                 $selectField .= $fieldsValue[$field] . ',';
             }else{
-                $selectField .= $field . ',';
+                $selectField .= "`$field`" . ',';
             }
         }
         $insertField = rtrim($insertField, ',');
