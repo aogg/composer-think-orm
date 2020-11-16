@@ -77,6 +77,11 @@ class Set
     {
         $table = $table?:$query->getTable();
         $table = $builder->parseTable($query, $table);
+
+        if (preg_match('/(\s*select.+from)/i', $table)) { // 整体子查询
+            return false;
+        }
+
         preg_match('/([^\s]+)(?:\s+([^\s]+))?\s*$/', $table, $matches);
         $lastTableName = (!empty($matches[2]) ? $matches[2] : (!empty($matches[1]) ? $matches[1] : '')) . '.';
         $lastTableName = $lastTableName === '.' ? '' : $lastTableName; // 去无效点
@@ -134,20 +139,31 @@ class Set
         }
 
         if ($type === 'where') {
-            static::handleGlobalFieldJoinPro($builder, $query);
+            static::handleGlobalFieldJoinPro($builder, $query); // join
+            $lastTableName = static::handleFieldTableName($builder, $query);
+
+            if ($lastTableName === false) { // 整体子查询
+                return;
+            }
+
+            $lastTableName = str_replace('`', '', $lastTableName);
 
             foreach (static::$globalField as $field => $globalFieldValue) {
-                $lastTableName = str_replace('`', '', static::handleFieldTableName($builder, $query));
 
                 $query->where($lastTableName . $field, $globalFieldValue);
             }
 
         }else if($type === 'update'){ // 待处理控制data
             $data = $query->getOptions('data');
-            static::handleGlobalFieldJoinPro($builder, $query);
+            static::handleGlobalFieldJoinPro($builder, $query); // join
+            $lastTableName = static::handleFieldTableName($builder, $query);
+
+            if ($lastTableName === false) { // 整体子查询
+                return;
+            }
+            $lastTableName = str_replace('`', '', $lastTableName); // 字段不支持表名有`
 
             foreach (static::$globalField as $field => $globalFieldValue) {
-                $lastTableName = str_replace('`', '', static::handleFieldTableName($builder, $query)); // 字段不支持表名有`
                 $query->where($lastTableName . $field, $globalFieldValue);
 
                 static::handleGlobalFieldDataPro($data, $field, $globalFieldValue);
