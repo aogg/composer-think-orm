@@ -64,7 +64,7 @@ class Query extends \think\db\Query
      */
     public function isSkipGlobalField(): bool
     {
-        return $this->skipGlobalField || $this->getModel()->isSkipGlobalField();
+        return $this->skipGlobalField || (method_exists($this->getModel(), 'isSkipGlobalField') && $this->getModel()->isSkipGlobalField());
     }
 
 
