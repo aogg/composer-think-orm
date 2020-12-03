@@ -10,7 +10,7 @@ namespace aogg\think\orm;
  * 
  * @mixin Query
  * @method \think\Paginator|$this[] paginate($listRows = null, $simple = false)
- * @method static \think\db\Query hasWhere(string $relation, $where = [], string $fields = '*', string $joinType = '', \think\db\BaseQuery $query = null)
+ * @method static \think\db\Query hasWhere(string $relation, $where = [], string $fields = '*', string $joinType = '', \think\db\BaseQuery $query = null) 根据关联条件查询当前模型，第二个$where不用给别名（用的是关联model的别名）
  */
 class Model extends \think\Model
 {
