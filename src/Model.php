@@ -10,6 +10,7 @@ namespace aogg\think\orm;
  * 
  * @mixin Query
  * @method \think\Paginator|$this[] paginate($listRows = null, $simple = false)
+ * @method static \think\db\Query hasWhere(string $relation, $where = [], string $fields = '*', string $joinType = '', \think\db\BaseQuery $query = null)
  */
 class Model extends \think\Model
 {
