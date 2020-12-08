@@ -11,6 +11,8 @@ namespace aogg\think\orm;
  */
 class Set
 {
+    protected $mysqlConnectorEventFinishBool = false;
+
     /**
      * 全局字段
      * 查询和更新时自带where
@@ -197,5 +199,24 @@ class Set
     public static function setGlobalFieldForceSaveBool(bool $globalFieldForceSaveBool)
     {
         self::$globalFieldForceSaveBool = $globalFieldForceSaveBool;
+    }
+
+    /**
+     * @param bool $mysqlConnectorEventFinishBool
+     * @return Set
+     */
+    public function setMysqlConnectorEventFinishBool(bool $mysqlConnectorEventFinishBool = true)
+    {
+        $this->mysqlConnectorEventFinishBool = $mysqlConnectorEventFinishBool;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMysqlConnectorEventFinishBool(): bool
+    {
+        return $this->mysqlConnectorEventFinishBool;
     }
 }

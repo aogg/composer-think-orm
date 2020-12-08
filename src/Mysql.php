@@ -12,8 +12,6 @@ use think\db\BaseQuery;
 
 class Mysql extends \think\db\connector\Mysql
 {
-    protected static $eventFinishBool = false;
-
     public function __construct(array $config = [])
     {
         if ($config['type'] === Mysql::class) { // 设置为class，会导致报错
@@ -22,8 +20,10 @@ class Mysql extends \think\db\connector\Mysql
 
         parent::__construct($config);
 
-        if (!self::$eventFinishBool){ // 指通知一次
-            self::$eventFinishBool = true;
+        /** @var Set $setObject */
+        $setObject = app(Set::class);
+        if (!$setObject->isMysqlConnectorEventFinishBool()){ // 指通知一次
+            $setObject->setMysqlConnectorEventFinishBool();
             event('ConnectorPdoCreateFirst', [$this]); // pdo连接首次创建通知
         }
     }
